@@ -85,3 +85,6 @@ a.desc:after {
 .card-item {
     margin-bottom: 5px;
 }
+.favoriteButton {
+    cursor: pointer;
+}

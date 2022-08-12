@@ -4,11 +4,26 @@ namespace app\controllers;
 
 use app\models\book\Book;
 use app\models\book\BookSearch;
+use yii\filters\ContentNegotiator;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class BooksController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+          'content' => [
+              'class' => ContentNegotiator::class,
+              'only' => ['is-favorite'],
+              'formats' => [
+                  'application/json' => Response::FORMAT_JSON,
+              ],
+          ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -29,7 +44,7 @@ class BooksController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new BookSearch(['authorId' =>  1]);
+        $searchModel = new BookSearch(['authorId' => 1]);
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -52,6 +67,17 @@ class BooksController extends Controller
         ]);
     }
 
+    public function actionIsFavorite($id)
+    {
+        $model = $this->findModel($id);
+        $model->is_favorite = !$model->is_favorite;
+        $model->save(false);
+
+        return [
+            'success' => true,
+            'isFavorite' => (bool)$model->is_favorite,
+        ];
+    }
 
     /**
      * Finds the Book model based on its primary key value.
