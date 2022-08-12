@@ -16,13 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="book-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_search', ['model' => $searchModel]); ?>
 
+    <?php \yii\widgets\Pjax::begin() ?>
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'pager' => [
-                'class' => \yii\bootstrap4\LinkPager::class,
+            'class' => \yii\bootstrap4\LinkPager::class,
         ],
         'summary' => false,
         'layout' => '<div class="row">{items}</div><div class="footer">{pager}</div>',
@@ -35,5 +35,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
         }
     ]); ?>
-
+    <?php \yii\widgets\Pjax::end() ?>
 </div>
